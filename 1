@@ -1,101 +1,111 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>天天开红包</title>
-  <style>
-    body {
-      margin: 0;
-      background: #ff4865;
-      font-family: Arial, sans-serif;
-    }
-    .main-img {
-      width: 100%;
-      max-width: 600px;
-      display: block;
-      margin: 0 auto;
-    }
-    .copy-btn {
-      position: absolute;
-      width: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: pulse 0.7s infinite;
-      z-index: 10;
-    }
-    @keyframes pulse {
-      0%   { transform: scale(1) translateX(-50%); }
-      50%  { transform: scale(1.15) translateX(-43%); }
-      100% { transform: scale(1) translateX(-50%); }
-    }
-    .tips {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      display: none;
-      z-index: 9999;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>天天开红包</title>
+    <style>
+        body {
+            background: #ff4865;
+            font-family: Hiragino Sans GB, Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .coupon-container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            padding-top: 20px;
+        }
+
+        /* 手机屏幕样式 */
+        .phone-screen {
+            background-color: #fff;
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .coupon-image {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* 复制按钮样式 */
+        #couponButton {
+            width: 80%;
+            height: auto;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #ff002d; /* 设置按钮的背景色 */
+            border-radius: 25px; /* 圆角按钮 */
+            padding: 15px 0;
+            color: #fff;
+            font-size: 22px; /* 设置文字大小 */
+            text-align: center;
+            border: none;
+            position: absolute;
+            bottom: 25%; /* 修改为底部的四分之一位置 */
+            left: 50%;
+            transform: translateX(-50%); /* 居中对齐 */
+        }
+
+        #couponButton:hover {
+            background-color: #e6002b; /* 鼠标悬停时按钮变色 */
+        }
+    </style>
 </head>
 <body>
-  <!-- 主图 -->
-  <img src="https://crm.shenquanwaimai.com/resource/image/crmapi/shangou1.png" class="main-img" />
 
-  <!-- 一键复制按钮 -->
-  <img id="copyBtn" class="copy-btn"
-       src="https://crm.shenquanwaimai.com/resource/image/crmapi/shangou2.png"
-       data-clipboard-text="￥NCHPVwW2Q7m￥/ HU7405" />
+    <div class="coupon-container">
+        <div class="phone-screen">
+            <img class="coupon-image" src="https://crm.shenquanwaimai.com/resource/image/crmapi/shangou1.png" alt="Coupon Background">
 
-  <!-- 成功提示 -->
-  <div id="tips" class="tips">口令复制成功！请打开「淘宝App」查看</div>
+            <!-- 复制按钮 -->
+            <button id="couponButton" class="keycopy" data-clipboard-text="￥WLwp4cvR0Z2￥/ HU7405">
+                复制口令去淘宝领红包
+            </button>
+        </div>
+        <p>点击按钮复制淘宝优惠口令</p>
+    </div>
 
-  <!-- ClipboardJS CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
-  <script>
-    const copyBtn = document.getElementById("copyBtn");
-    const tips = document.getElementById("tips");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+    <script>
+        // 固定口令
+        var couponCode = "￥WLwp4cvR0Z2￥/ HU7405";
 
-    // 设置复制按钮位置随屏幕自适应
-    function updatePosition() {
-      const width = Math.min(window.innerWidth, 600);
-      const top = width * 580 / 400; // 等比定位
-      copyBtn.style.top = top + "px";
-    }
+        // 初始化 ClipboardJS 来处理复制功能
+        var clipboard = new ClipboardJS('.keycopy', {
+            text: function() {
+                return couponCode; // 复制固定的口令
+            }
+        });
 
-    window.addEventListener("resize", updatePosition);
-    updatePosition();
+        clipboard.on('success', function(e) {
+            alert("口令已复制，正在跳转到淘宝APP...");
+            
+            // 复制成功后，自动打开淘宝应用（移动端）
+            setTimeout(function() {
+                window.location.href = "tbopen://m.taobao.com";
+            }, 500); // 延迟500毫秒后跳转
+        });
+        
+        clipboard.on('error', function(e) {
+            alert("复制失败，请手动复制口令。");
+        });
+    </script>
 
-    // 初始化复制逻辑
-    const clipboard = new ClipboardJS(copyBtn, {
-      text: function() {
-        setTimeout(() => {
-          window.location.href = "https://ace.tb.cn/t?smburl=tbopen%3A%2F%2Fm.taobao.com%2Ftbopen%2Findex.html%3Fh5Url%3D";
-        }, 300);
-        return copyBtn.getAttribute("data-clipboard-text");
-      }
-    });
-
-    clipboard.on("success", () => {
-      tips.style.display = "block";
-      setTimeout(() => {
-        tips.style.display = "none";
-      }, 3000);
-    });
-
-    clipboard.on("error", () => {
-      tips.textContent = "复制失败，请手动复制口令";
-      tips.style.display = "block";
-      setTimeout(() => {
-        tips.style.display = "none";
-      }, 3000);
-    });
-  </script>
 </body>
 </html>
